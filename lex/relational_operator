@@ -1,0 +1,14 @@
+%{
+#include <stdio.h>
+%}
+
+%%
+"word"    printf("Recognized word: %s\n", yytext);
+[><=]     printf("Relational operator: %s\n", yytext);
+.         ;
+%%
+
+int main() {
+    yylex();
+    return 0;
+}
