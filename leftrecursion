@@ -1,0 +1,57 @@
+#include <stdio.h>
+#include <string.h>
+#include <ctype.h>
+#define MAX_RULES 10
+#define MAX_RULE_LEN 20
+char rules[MAX_RULES][MAX_RULE_LEN];
+int num_rules;
+num_rules = 0;
+void eliminateLeftRecursion() {
+    int i, j, k;
+    char prime[MAX_RULE_LEN];
+    char new_rule[MAX_RULE_LEN];
+
+    for (i = 0; i < num_rules; i++) {
+        for (j = 0; j < i; j++) {
+            if (rules[i][0] == rules[j][0]) {
+                strcpy(prime, rules[i]);
+                strcpy(new_rule, rules[i]);
+                strcat(new_rule + strlen(new_rule), "'");
+
+                for (k = 0; k < num_rules; k++) {
+                    if (rules[k][0] == rules[j][0]) {
+                        strcpy(rules[k], rules[k] + 1);
+                        strcat(rules[k], new_rule);
+                    }
+                }
+
+                strcpy(prime + 1, rules[j] + 1);
+                strcat(prime, new_rule);
+
+                strcpy(rules[i], new_rule);
+                strcpy(rules[num_rules++], prime);
+            }
+        }
+    }
+}
+
+int main() {
+    printf("Enter the number of rules: ");
+    scanf("%d", &num_rules);
+ 
+    printf("Enter the production rules (e.g., A -> Ap | B): \n");
+    int i,j,k;
+    for ( i = 0; i < num_rules; i++) {
+        scanf("%s", rules[i]);
+    }
+
+    eliminateLeftRecursion();
+
+    printf("\nProduction rules after eliminating left recursion:\n");
+    
+    for (i = 0; i < num_rules; i++) {
+        printf("%s\n", rules[i]);
+    }
+
+    return 0;
+}
