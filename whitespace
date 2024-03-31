@@ -1,0 +1,35 @@
+#include <stdio.h>
+#include <ctype.h>
+
+int main() {
+    char input[1000];
+    int whitespace_count = 0;
+    int newline_count = 0;
+
+    printf("Enter a string (press Enter to finish):\n");
+
+    // Read input until Enter is pressed
+    while (fgets(input, sizeof(input), stdin)) {
+        // Check each character in the input
+        for (int i = 0; input[i] != '\0'; i++) {
+            if (isspace(input[i])) {
+                // If the character is whitespace, increment the count
+                whitespace_count++;
+            }
+            if (input[i] == '\n') {
+                // If the character is newline, increment the count
+                newline_count++;
+            }
+        }
+
+        // Check if only Enter was pressed (empty line)
+        if (input[0] == '\n') {
+            break;
+        }
+    }
+
+    printf("Number of whitespace characters: %d\n", whitespace_count);
+    printf("Number of newline characters: %d\n", newline_count);
+
+    return 0;
+}
