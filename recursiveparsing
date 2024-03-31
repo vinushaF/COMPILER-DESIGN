@@ -1,0 +1,49 @@
+#include <stdio.h>
+#include <stdbool.h>
+#include <ctype.h>
+
+bool factor(char **input);
+bool term(char **input);
+bool expression(char **input);
+
+void consumeWhitespace(char **input) {
+    while (**input && isspace(**input)) (*input)++;
+}
+
+bool number(char **input) {
+    consumeWhitespace(input);
+    return isdigit(**input) && ((*input)++, true);
+}
+
+bool factor(char **input) {
+    consumeWhitespace(input);
+    if (**input == '(') {
+        (*input)++;
+        bool valid = expression(input);
+        if (valid && **input == ')') return (*input)++, true;
+        return false;
+    } else return number(input);
+}
+
+bool term(char **input) {
+    consumeWhitespace(input);
+    bool valid = factor(input);
+    while (valid && (**input == '*' || **input == '/')) (*input)++, valid = factor(input);
+    return valid;
+}
+
+bool expression(char **input) {
+    consumeWhitespace(input);
+    bool valid = term(input);
+    while (valid && (**input == '+' || **input == '-')) (*input)++, valid = term(input);
+    return valid;
+}
+
+int main() {
+    char input[100];
+    printf("Enter an arithmetic expression: ");
+    fgets(input, sizeof(input), stdin);
+    char *ptr = input;
+    printf(expression(&ptr) && *ptr == '\n' ? "Valid\n" : "Invalid\n");
+    return 0;
+}
