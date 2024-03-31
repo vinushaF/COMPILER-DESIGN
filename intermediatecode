@@ -1,0 +1,51 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <ctype.h>
+
+void generateThreeAddressCode(const char *expression) {
+    char result[100];
+    char op1[50], op2[50];
+
+    // Initialize the result to a temporary variable
+    strcpy(result, "t1");
+
+    int t = 1; // Temporary variable counter
+
+    int i = 0;
+    while (expression[i] != '\0') {
+        if (isdigit(expression[i])) {
+            int j = 0;
+            while (isdigit(expression[i])) {
+                op1[j++] = expression[i++];
+            }
+            op1[j] = '\0';
+            printf("t%d = %s\n", t, op1);
+            sprintf(op1, "t%d", t++);
+        } else if (expression[i] == '+' || expression[i] == '-' || expression[i] == '*' || expression[i] == '/') {
+            char op = expression[i++];
+            int j = 0;
+            while (isspace(expression[i])) i++; // Skip whitespace
+            while (isdigit(expression[i])) {
+                op2[j++] = expression[i++];
+            }
+            op2[j] = '\0';
+            printf("%s = %s %c %s\n", result, op1, op, op2);
+            sprintf(op1, "%s", result);
+            sprintf(result, "t%d", t++);
+        } else {
+            i++;
+        }
+    }
+}
+
+int main() {
+    char expression[100];
+    printf("Enter an arithmetic expression: ");
+    fgets(expression, sizeof(expression), stdin);
+
+    printf("Three Address Code:\n");
+    generateThreeAddressCode(expression);
+
+    return 0;
+}
