@@ -1,0 +1,38 @@
+%{
+#include <stdio.h>
+int max_length = 0;
+%}
+
+%option noyywrap
+
+%%
+
+[a-zA-Z]+    {
+                int length = yyleng;
+                if (length > max_length) {
+                    max_length = length;
+                }
+            }
+.            ;
+
+%%
+
+int main() {
+    yylex();
+    printf("Length of the longest word: %d\n", max_length);
+    return 0;
+}
+
+
+
+
+
+
+
+
+
+
+
+lex program_name.l
+gcc lex.yy.c -o program_name -ll
+./program_name < input_file.txt
