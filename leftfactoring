@@ -1,0 +1,41 @@
+#include <stdio.h>
+#include <string.h>
+#define MAX_RULES 10
+#define MAX_RULE_LEN 20
+char rules[MAX_RULES][MAX_RULE_LEN];
+int num_rules = 0;
+void eliminateLeftFactoring() {
+    int i, j, k;
+    for (i = 0; i < num_rules; i++) {
+        for (j = i + 1; j < num_rules; j++) {
+            k = 0;
+            while (rules[i][k] == rules[j][k] && rules[i][k] != '\0') {
+                k++;
+            }
+            if (k > 0) {
+                printf("%s' -> %s | e\n", rules[i], rules[i] + k);
+                strcpy(rules[num_rules++], rules[i]);
+                strcpy(rules[i], rules[i] + k + 1);
+            }
+        }
+    }
+}
+int main() {
+    printf("Enter the number of rules: ");
+    scanf("%d", &num_rules);
+
+    printf("Enter the production rules (e.g., A -> aA | aB | bC): \n");
+    int i;
+    for (i = 0; i < num_rules; i++) {
+        scanf("%s", rules[i]);
+    }
+
+    eliminateLeftFactoring();
+
+    printf("\nProduction rules after eliminating left factoring:\n");
+    for (i = 0; i < num_rules; i++) {
+        printf("%s\n", rules[i]);
+    }
+
+    return 0;
+}
