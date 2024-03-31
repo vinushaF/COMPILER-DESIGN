@@ -1,0 +1,42 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdbool.h>
+#include <ctype.h>
+
+double number(char **input) {
+    while (isspace(**input)) (*input)++;
+    return strtod(*input, input);
+}
+
+double factor(char **input) {
+    double result = **input == '(' ? (++(*input), expression(input)) : number(input);
+    while (**input == '*' || **input == '/') {
+        char op = *(*input)++;
+        double next = factor(input);
+        result = op == '*' ? result * next : result / next;
+    }
+    return result;
+}
+
+double term(char **input) {
+    double result = factor(input);
+    while (**input == '+' || **input == '-') {
+        char op = *(*input)++;
+        double next = factor(input);
+        result = op == '+' ? result + next : result - next;
+    }
+    return result;
+}
+
+double expression(char **input) {
+    return term(input);
+}
+
+int main() {
+    char input[100];
+    printf("Enter an arithmetic expression: ");
+    fgets(input, sizeof(input), stdin);
+    char *ptr = input;
+    printf("Result: %.2f\n", expression(&ptr));
+    return 0;
+}
