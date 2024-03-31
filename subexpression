@@ -1,0 +1,40 @@
+#include <stdio.h>
+#include <string.h>
+
+struct Expression {
+    char *op, *arg1, *arg2;
+};
+
+int main() {
+    struct Expression expressions[] = {
+        {"+", "a", "b"},
+        {"-", "c", "d"},
+        {"*", "a", "b"},
+        {"-", "c", "d"},
+        {"/", "x", "y"}
+    };
+
+    int n = sizeof(expressions) / sizeof(expressions[0]);
+
+    printf("Original expressions:\n");
+    for (int i = 0; i < n; i++)
+        printf("Expression %d: %s = %s %s %s\n", i + 1, expressions[i].op, expressions[i].arg1, expressions[i].arg2);
+
+    printf("\nOptimized expressions:\n");
+    for (int i = 0; i < n; i++) {
+        if (expressions[i].op == NULL) continue;
+        for (int j = i + 1; j < n; j++) {
+            if (strcmp(expressions[i].op, expressions[j].op) == 0 &&
+                strcmp(expressions[i].arg1, expressions[j].arg1) == 0 &&
+                strcmp(expressions[i].arg2, expressions[j].arg2) == 0) {
+                printf("Expression %d and Expression %d are identical.\n", i + 1, j + 1);
+                printf("Common subexpression found: %s = %s %s %s\n", expressions[i].op, expressions[i].arg1, expressions[i].arg2, expressions[j].op);
+                expressions[j].op = NULL;
+            }
+        }
+        if (expressions[i].op != NULL)
+            printf("Expression %d: %s = %s %s %s\n", i + 1, expressions[i].op, expressions[i].arg1, expressions[i].arg2);
+    }
+
+    return 0;
+}
