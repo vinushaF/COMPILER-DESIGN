@@ -1,0 +1,26 @@
+#include <stdio.h>
+#include <string.h>
+
+int is_comment(char *line) {
+    if (strstr(line, "//") == line) {
+        return 1; // Single-line comment
+    } else if (strstr(line, "/*") != NULL && strstr(line, "*/") != NULL) {
+        return 1; // Multi-line comment
+    }
+    return 0; // Not a comment
+}
+
+int main() {
+    char line[100];
+
+    // Read input line by line
+    while (fgets(line, sizeof(line), stdin)) {
+        if (is_comment(line)) {
+            printf("Comment\n");
+        } else {
+            printf("Not a comment\n");
+        }
+    }
+
+    return 0;
+}
